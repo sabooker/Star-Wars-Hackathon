@@ -2,6 +2,7 @@
 
 # AWS Configuration
 aws_region = "us-east-1"
+aws_account_profile = "profile-582482956935"
 environment_name = "star-wars-hackathon"
 
 # Network Configuration
