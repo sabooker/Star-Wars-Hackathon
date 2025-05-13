@@ -62,7 +62,7 @@ This project creates a realistic enterprise environment with:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/Star-Wars-Hackathon.git
+   git clone https://github.com/royalsirrine/Star-Wars-Hackathon.git
    cd Star-Wars-Hackathon
    ```
 
@@ -71,17 +71,27 @@ This project creates a realistic enterprise environment with:
    terraform init
    ```
 
-3. Review the plan:
+3. Copy and configure the variables file:
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   # Edit terraform.tfvars with your specific values
+   ```
+
+4. Review the planned infrastructure:
    ```bash
    terraform plan
    ```
 
-4. Deploy the infrastructure:
+5. Deploy the infrastructure:
    ```bash
    terraform apply
    ```
 
-5. Configure ServiceNow Discovery using the MID Server public IP from outputs
+6. After deployment, use the outputs to:
+   - Connect to the MID Server
+   - Configure ServiceNow Discovery
+   - Set up AWS Service Management Connector
+   - Run Discovery to populate the CMDB
 
 ## Repository Structure
 
@@ -96,8 +106,14 @@ Star-Wars-Hackathon/
     ├── vpc/
     ├── security_groups/
     ├── ec2_instances/
-    ├── domain_controller/
+    ├── domain_controllers/
+    ├── windows_servers/
+    ├── linux_servers/
     ├── databases/
+    ├── mid_server/
+    ├── monitoring/
+    ├── load_balancers/
+    ├── cloudwatch/
     └── discovery_credentials/
 ```
 
@@ -123,7 +139,12 @@ Star-Wars-Hackathon/
 
 ## ServiceNow Discovery Configuration
 
-1. Install MID Server on R2-D2
+1. Install MID Server on R2-D2:
+   ```bash
+   ssh -i lightsaber-key.pem ec2-user@<MID_SERVER_PUBLIC_IP>
+   sudo /opt/servicenow/mid-server/scripts/download_mid_server.sh <MID_SERVER_URL>
+   ```
+
 2. Configure credentials for Windows domains and Linux SSH
 3. Set up Discovery schedules for all subnets
 4. Configure AWS Service Management Connector
@@ -146,9 +167,51 @@ The environment uses diverse instance types to demonstrate:
 - Cost optimization opportunities
 - Performance vs. cost analysis
 
+## Hackathon Challenges
+
+This infrastructure addresses the 2025 ServiceNow Hackathon challenges:
+
+1. **Drive down operational costs**: 
+   - Demonstrates efficient discovery and CMDB population
+   - Shows cost optimization through instance analysis
+   - Automates inventory management
+
+2. **Improve existing products**:
+   - Enhanced CMDB with complete infrastructure visibility
+   - Integrated multi-source discovery
+   - Comprehensive software asset tracking
+
+3. **Explore new opportunities**:
+   - CSDM implementation patterns
+   - Advanced SAM Pro capabilities
+   - Cross-platform discovery integration
+
 ## Contributing
 
-Please follow the contribution guidelines in CONTRIBUTING.md
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Troubleshooting
+
+Common issues and solutions:
+
+### MID Server Connection Issues
+- Verify security groups allow outbound HTTPS (443)
+- Check IAM role has necessary permissions
+- Ensure ServiceNow instance URL is correct
+
+### Discovery Failures
+- Verify discovery credentials are correct
+- Check security groups allow required ports
+- Ensure domain controllers are accessible
+
+### Cost Optimization
+- Review instance types for over-provisioned resources
+- Consider reserved instances for long-term use
+- Use the cost optimization dashboard outputs
 
 ## License
 
@@ -160,4 +223,18 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - AWS Well-Architected Framework
 - Star Wars universe for the naming inspiration
 
+## Support
+
+For questions or issues:
+- Open an issue on GitHub
+- Contact: rebel-it@starwars.local (fictional)
+
 May the Discovery be with you!
+
+---
+
+**Note**: This is a demonstration environment for the ServiceNow Hackathon. Ensure you destroy resources after the hackathon to avoid unnecessary AWS charges.
+
+```bash
+terraform destroy
+```
