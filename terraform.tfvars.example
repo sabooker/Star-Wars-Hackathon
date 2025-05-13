@@ -1,0 +1,180 @@
+# terraform.tfvars.example - Star Wars Hackathon Configuration
+
+# AWS Configuration
+aws_region = "us-east-1"
+environment_name = "star-wars-hackathon"
+
+# Network Configuration
+vpc_cidr = "10.0.0.0/16"
+public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs = ["10.0.10.0/24", "10.0.20.0/24", "10.0.30.0/24", "10.0.40.0/24"]
+availability_zones = ["us-east-1a", "us-east-1b"]
+
+# SSH Key
+key_name = "lightsaber-key"
+
+# ServiceNow Configuration
+servicenow_instance_url = "https://dev220647.service-now.com"
+
+# Windows Instance Types - Mix of generations for demo
+windows_instance_types = {
+  "death-star-dc1"        = "t3.large"     # Current gen
+  "death-star-dc2"        = "t3.medium"    # Current gen
+  "star-destroyer-sql"    = "m5.xlarge"    # Current gen - High performance for SQL
+  "imperial-cruiser-app"  = "m4.large"     # Previous gen - Upgrade candidate
+  "tie-fighter-web"       = "t3.large"     # Current gen
+  "at-at-walker-app"      = "m5.large"     # Current gen
+  "storm-trooper-svc"     = "t2.medium"    # Old gen - High priority upgrade
+  "imperial-shuttle-mgt"  = "t3.medium"    # Current gen
+}
+
+# Linux Instance Types - Diverse for cost optimization demo
+linux_instance_types = {
+  "millennium-falcon-db"   = "r5.xlarge"    # Memory optimized for DB
+  "x-wing-web"            = "t3.large"      # Burstable for web
+  "y-wing-app"            = "m4.large"      # Previous gen - Upgrade candidate
+  "rebel-cruiser-app"     = "t3.large"      # Current gen
+  "mon-calamari-db"       = "r5.large"      # Memory optimized
+  "a-wing-web"            = "t3.medium"     # Current gen
+  "b-wing-app"            = "m5.medium"     # Current gen
+  "rebel-transport-cache" = "r5.large"      # Memory optimized for Redis
+}
+
+# Database Instance Types
+database_instance_types = {
+  "death-star-core-sql"    = "r5.xlarge"    # Production SQL Server
+  "imperial-vault-sql"     = "r5.large"     # Secondary SQL Server
+  "rebel-base-postgres"    = "r5.xlarge"    # Production PostgreSQL
+  "hidden-fortress-mysql"  = "r5.large"     # MySQL Database
+  "jedi-archive-oracle"    = "r5.2xlarge"   # Oracle (if enabled)
+}
+
+# MID Server Configuration
+mid_server_instance_type = "t3.large"
+
+# Operating System Versions (for AMI selection)
+windows_os_versions = {
+  "2016" = "Windows_Server-2016-English-Full-Base-*"
+  "2019" = "Windows_Server-2019-English-Full-Base-*"
+  "2022" = "Windows_Server-2022-English-Full-Base-*"
+}
+
+# Software Versions
+java_versions = ["8", "11", "17", "21"]
+
+database_versions = {
+  "sql_server"  = "2019"
+  "postgresql"  = "14"
+  "mysql"       = "8.0"
+  "oracle"      = "19c"
+}
+
+# Discovery Credentials (Use strong passwords in production!)
+discovery_credentials = {
+  windows_domain = {
+    username = "svc-discovery"
+    password = "UseStrongPasswordHere!"
+  }
+  windows_local = {
+    username = "empire-discovery-admin"
+    password = "UseStrongPasswordHere!"
+  }
+  linux_ssh = {
+    username = "rebel-discovery-user"
+    password = "UseStrongPasswordHere!"
+  }
+}
+
+# Security Software Configuration
+security_software = {
+  "blastshield" = {
+    version = "5.4.2"
+    vendor  = "Imperial Security Systems"
+  }
+  "forcefield" = {
+    version = "3.2.1"
+    vendor  = "Jedi Defense Corps"
+  }
+  "rebelguard" = {
+    version = "2.1.8"
+    vendor  = "Rebel Alliance Security"
+  }
+}
+
+# Tags
+common_tags = {
+  Project      = "Star-Wars-Hackathon"
+  Environment  = "Development"
+  ManagedBy    = "Terraform"
+  CostCenter   = "IT-Innovation"
+  Owner        = "your-email@company.com"
+  DeployedBy   = "Your Name"
+  DeployedDate = "2024-03-15"
+  Purpose      = "ServiceNow-Discovery-POC"
+}
+
+# Optional Features
+deploy_oracle = false  # Set to true to include Oracle database
+enable_monitoring = true
+enable_backups = true
+enable_high_availability = true
+
+# Cost Optimization Settings
+use_spot_instances = false  # Not recommended for this demo
+enable_auto_shutdown = false  # Could be used to save costs
+shutdown_schedule = "0 20 * * 1-5"  # Shutdown at 8 PM weekdays
+
+# Compliance Settings
+enable_encryption = true
+enable_cloudtrail = true
+enable_config = true
+enable_guardduty = false
+
+# Application Configurations
+applications = {
+  "death-star-control" = {
+    port    = 8080
+    path    = "/death-star"
+    version = "1.0.0"
+  }
+  "rebel-comms" = {
+    port    = 3000
+    path    = "/rebel-alliance"
+    version = "2.1.5"
+  }
+  "jedi-council" = {
+    port    = 8443
+    path    = "/jedi"
+    version = "3.0.0"
+  }
+  "imperial-fleet-mgmt" = {
+    port    = 9090
+    path    = "/fleet"
+    version = "1.5.2"
+  }
+}
+
+# Monitoring Configuration
+monitoring_config = {
+  prometheus_retention = "30d"
+  grafana_admin_password = "ChangeThisPassword!"
+  alertmanager_webhook = ""
+  enable_cloudwatch_exporter = true
+}
+
+# Backup Configuration
+backup_config = {
+  retention_days = 7
+  backup_window = "03:00-04:00"
+  preferred_backup_window = "sun:05:00-sun:06:00"
+  skip_final_snapshot = true  # Set to false in production
+}
+
+# Network ACLs (optional additional security)
+enable_network_acls = false
+restricted_ingress_cidrs = []  # Add specific CIDRs if needed
+
+# VPN Configuration (if needed for secure access)
+enable_vpn = false
+vpn_cidr = "10.1.0.0/16"
+vpn_users = []
