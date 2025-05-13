@@ -49,8 +49,8 @@ terraform.rc
 id_rsa*
 
 # Ignore any credentials files
-*credentials*
-*secrets*
+#*credentials*
+#*secrets*
 
 # Ignore log files
 *.log
