@@ -6,6 +6,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "aws_account_profile" {
+  description = "AWS profile setup in ~/.aws/credentials"
+  type        = string
+  default     = "profile-582482956935"
+}
+
 variable "environment_name" {
   description = "Environment name for resource tagging"
   type        = string

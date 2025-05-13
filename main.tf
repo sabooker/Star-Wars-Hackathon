@@ -22,27 +22,7 @@ module "mid_server_windows" {
   domain_controller_ip = module.domain_controllers.primary_dc_private_ip
 }# main.tf - Star Wars Hackathon Infrastructure
 
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-  required_version = ">= 1.0"
-}
 
-provider "aws" {
-  region = var.aws_region
-  
-  default_tags {
-    tags = {
-      Project     = "Star-Wars-Hackathon"
-      Environment = "Development"
-      Purpose     = "ServiceNow Discovery POC"
-    }
-  }
-}
 
 # VPC Module - The Galaxy
 module "vpc" {
@@ -52,13 +32,12 @@ module "vpc" {
   public_subnet_cidrs  = var.public_subnet_cidrs
   private_subnet_cidrs = var.private_subnet_cidrs
   availability_zones   = var.availability_zones
-  environment_name     = var.environment_name
 }
 
 # Security Groups - Imperial and Rebel Forces
 module "security_groups" {
-  source = "./modules/security_groups"
-  
+  source           = "./modules/security_groups"
+  vpc_cidr         = var.vpc_cidr
   vpc_id           = module.vpc.vpc_id
   environment_name = var.environment_name
 }
@@ -66,23 +45,23 @@ module "security_groups" {
 # Domain Controllers - The Empire
 module "domain_controllers" {
   source = "./modules/domain_controllers"
-  
-  private_subnet_ids = module.vpc.private_subnet_ids
-  security_group_id  = module.security_groups.windows_security_group_id
-  key_name          = var.key_name
-  environment_name  = var.environment_name
+  vpc_id              = module.vpc.vpc_id
+  private_subnet_ids  = module.vpc.private_subnet_ids
+  security_group_id   = module.security_groups.windows_security_group_id
+  key_name            = var.key_name
+  environment_name    = var.environment_name
 }
 
 # Windows Servers - Imperial Fleet
 module "windows_servers" {
   source = "./modules/windows_servers"
-  
-  private_subnet_ids    = module.vpc.private_subnet_ids
-  security_group_id     = module.security_groups.windows_security_group_id
-  domain_controller_ip  = module.domain_controllers.primary_dc_private_ip
-  key_name             = var.key_name
-  environment_name     = var.environment_name
-  instance_types       = var.windows_instance_types
+  database_instance_types = var.database_instance_types
+  private_subnet_ids      = module.vpc.private_subnet_ids
+  security_group_id       = module.security_groups.windows_security_group_id
+  domain_controller_ip    = module.domain_controllers.primary_dc_private_ip
+  key_name                = var.key_name
+  environment_name        = var.environment_name
+  instance_types          = var.windows_instance_types
 }
 
 # Linux Servers - Rebel Alliance
@@ -122,12 +101,12 @@ module "mid_server" {
 }
 
 # Discovery Credentials Management
-module "discovery_credentials" {
-  source = "./modules/discovery_credentials"
-  
-  environment_name = var.environment_name
-  vpc_id          = module.vpc.vpc_id
-}
+#module "discovery_credentials" {
+#  source = "./modules/discovery_credentials"
+#  
+#  environment_name = var.environment_name
+#  vpc_id          = module.vpc.vpc_id
+#}
 
 # Monitoring Server - C-3PO
 module "monitoring" {
@@ -186,7 +165,7 @@ output "servicenow_discovery_config" {
   sensitive = false
 }
 
-output "instance_inventory" {
+output "instances_inventory" {
   description = "Complete inventory of deployed instances"
   value = {
     windows_servers = module.windows_servers.instance_details
