@@ -39,6 +39,7 @@ module "security_groups" {
   source           = "./modules/security_groups"
   vpc_cidr         = var.vpc_cidr
   vpc_id           = module.vpc.vpc_id
+  vpc_cidr         = var.vpc_cidr
   environment_name = var.environment_name
 }
 
@@ -62,6 +63,7 @@ module "windows_servers" {
   key_name                = var.key_name
   environment_name        = var.environment_name
   instance_types          = var.windows_instance_types
+  common_tags             = var.common_tags
 }
 
 # Linux Servers - Rebel Alliance

@@ -8,3 +8,8 @@ variable "environment" {
   type        = string
   default     = "hackathon"
 }
+
+variable "environment_name" {
+  description = "Environment name for tagging"
+  type = string
+}
