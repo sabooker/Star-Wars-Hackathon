@@ -12,3 +12,7 @@ output "private_subnet_ids" {
   description = "IDs of the private subnets"
   value       = aws_subnet.core_worlds_subnets[*].id
 }
+
+output "vpc_cidr" {
+  value = aws_vpc.galaxy_vpc.cidr_block
+}
