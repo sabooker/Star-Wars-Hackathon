@@ -60,6 +60,7 @@ module "security_groups" {
   source = "./modules/security_groups"
   
   vpc_id           = module.vpc.vpc_id
+  vpc_cidr         = var.vpc_cidr
   environment_name = var.environment_name
 }
 
@@ -71,6 +72,7 @@ module "domain_controllers" {
   security_group_id  = module.security_groups.windows_security_group_id
   key_name          = var.key_name
   environment_name  = var.environment_name
+  vpc_id            = module.vpc.vpc_id
 }
 
 # Windows Servers - Imperial Fleet
@@ -83,6 +85,8 @@ module "windows_servers" {
   key_name             = var.key_name
   environment_name     = var.environment_name
   instance_types       = var.windows_instance_types
+  database_instance_types = var.database_instance_types
+  common_tags          = car.common_tags
 }
 
 # Linux Servers - Rebel Alliance
